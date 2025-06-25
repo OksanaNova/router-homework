@@ -36,4 +36,25 @@ router.delete('/:id', (req, res) => {
     }
 })
 
+router.put('/:name', (req, res) => {
+    let { name } = req.params;
+    let recipeToBeUpdated = recipes.find(recipe => recipe.name === name);
+
+    if (recipeToBeUpdated) {
+        const updateRecipe = req.body;
+        recipes.forEach(recipe => {
+            if (recipe.name === req.params.name) {
+                recipe.name = updateRecipe ? updateRecipe.name : recipe.name;
+                recipe.id = updateRecipe ? updateRecipe.id : recipe.id;
+                recipe.price = updateRecipe ? updateRecipe.price : recipe.price;
+
+                res.json({ message: 'Recipe updated', recipe})
+            }
+        })
+    } else {
+        res.status(404)
+        .json({ message: `Recipe you are looking for ${req.params.name} doesn't exist` })
+    }
+})
+
 module.exports = router;
